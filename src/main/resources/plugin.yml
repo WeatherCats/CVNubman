@@ -1,0 +1,9 @@
+name: CVNubman
+version: 1.18
+main: org.cubeville.cvnubman.CVNubman
+api-version: 1.18
+depend: [ CVGames, CVLoadouts ]
+softdepend: [ CVStats ]
+authors: [ WeatherCats ]
+description: A plugin for Player vs Player Combat on Cubeville
+website: cubeville.org
