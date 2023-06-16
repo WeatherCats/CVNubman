@@ -42,6 +42,7 @@ public class Nubman extends Game {
     Integer currentLevel = 1;
     List<Location> remainingPowerPellets;
     int nubmanEnraged = 0;
+    List<BukkitTask> powerTasks = new ArrayList<>();
     public Nubman(String id, String arenaName) {
         super(id, arenaName);
         addGameVariable("base-speed", new GameVariableDouble("The base bonus speed of the nubman"), 0.07);
@@ -142,7 +143,7 @@ public class Nubman extends Game {
                         for (Player player : ghosts) {
                             player.sendTitle("§cNubman is §nENRAGED", "§fDon't get caught!", 5, 40, 5);
                         }
-                        Bukkit.getScheduler().runTaskLater(CVNubman.getInstance(), () -> {
+                        powerTasks.add(Bukkit.getScheduler().runTaskLater(CVNubman.getInstance(), () -> {
                             if (nubmanEnraged > 0) {
                                 nubmanEnraged--;
                                 if (nubmanEnraged <= 0) {
@@ -153,7 +154,7 @@ public class Nubman extends Game {
                                     }
                                 }
                             }
-                        }, 200L);
+                        }, 200L));
                     }
                 }
                 for (Player player: ghosts) {
@@ -215,6 +216,9 @@ public class Nubman extends Game {
     public void onGameFinish() {
         proximityTask.cancel();
         effectTask.cancel();
+        for (BukkitTask task : powerTasks) {
+            task.cancel();
+        }
         sendStatistics();
         for (Player ghost : ghosts) {
             ghost.setGlowing(false);
@@ -228,6 +232,7 @@ public class Nubman extends Game {
         totalPellets = 0;
         currentLevel = 1;
         nubmanEnraged = 0;
+        powerTasks.clear();
     }
     private void loadLevel(Integer level) {
         HashMap<String, Object> levelData = ((List<HashMap<String, Object>>) getVariable("levels")).get(level - 1);
@@ -292,6 +297,10 @@ public class Nubman extends Game {
             player.setGlowing(false);
         }
         nubmanEnraged = 0;
+        for (BukkitTask task : powerTasks) {
+            task.cancel();
+        }
+        powerTasks.clear();
         remainingPowerPellets = (List<Location>) getVariable("pellets");
         currentLevel++;
         applyLoadout(nubman);
