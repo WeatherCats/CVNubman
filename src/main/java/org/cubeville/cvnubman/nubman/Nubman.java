@@ -121,6 +121,7 @@ public class Nubman extends Game {
         proximityTask = new BukkitRunnable() {
             @Override
             public void run() {
+                if (nubman == null) return;
                 Block block = nubman.getLocation().getBlock().getRelative(BlockFace.DOWN, 2);
                 if (block.getType().equals(Material.REDSTONE_BLOCK)) {
                     block.setType(Material.AIR);
@@ -182,6 +183,7 @@ public class Nubman extends Game {
             int count = 0;
             @Override
             public void run() {
+                if (nubman == null) return;
                 for (Location loc : remainingPowerPellets) {
                     loc.getWorld().spawnParticle(Particle.REDSTONE, loc, 2, .2, .2, .2, new Particle.DustOptions(Color.RED, 1));
                 }
@@ -308,7 +310,7 @@ public class Nubman extends Game {
             } else {
                 modifier = "§7";
             }
-            message = message + modifier + i + "§r ";
+            message = message + modifier + (i+1) + "§r ";
         }
         String messageAddition = "";
         String initialMessage = "";
