@@ -169,6 +169,7 @@ public class Nubman extends Game {
                             player.sendTitle("§cYou've been caught!", "§fReturn to the center!", 5, 50, 5);
                             player.playSound(player, Sound.ENTITY_GHAST_SCREAM, 15.0f, 1.0f);
                         } else {
+                            sendMessageToArena("§aNubman has been caught by §e" + player.getDisplayName());
                             finishGame();
                             proximityTask.cancel();
                         }
@@ -313,17 +314,15 @@ public class Nubman extends Game {
             message = message + modifier + (i+1) + "§r ";
         }
         String messageAddition = "";
-        String initialMessage = "";
         int completedLevels = 0;
         if (currentLevel >= getLevels().size() && eatenPellets >= totalPellets) {
             messageAddition = "\n§a§lFINISHED GAME!";
             completedLevels = currentLevel;
         } else {
             messageAddition = "\n§7Current Level's Pellets Eaten: §a" + eatenPellets + "§7/§f" + totalPellets;
-            initialMessage = "§aNubman has been caught!\n";
             completedLevels = currentLevel - 1;
         }
-        message = initialMessage + message + "\n\n§7Completed Levels: §a" + completedLevels + messageAddition;
+        message = message + "\n\n§7Completed Levels: §a" + completedLevels + messageAddition;
         sendMessageToArena(message);
     }
 
